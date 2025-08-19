@@ -1,13 +1,45 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
+import { Link } from "expo-router";
+
+import MusicSymbol from '../assets/img/music-symbol.png'
+import ThemedView from "../Components/ThemedView";
+import ThemedText from "../Components/ThemedText";
 
 const Home = () => {
     return (
-        <View>
-            <Text>Bottom Nav</Text>
-        </View>
+        <ThemedView style={styles.container}>
+            <Image source={MusicSymbol} style={styles.img}/>
+
+            <ThemedText style={styles.title}>Music App</ThemedText>
+            <Link href='/Login' style={styles.link}>Login</Link>
+            <Link href='/Register' style={styles.link}>Register</Link>
+            <Link href='/Releases' style={styles.link}>Releases (Go to Main Dashboard)</Link>
+        </ThemedView>
+        
     )
 }
 
 export default Home
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        margin: 20,
+    },
+    img: {
+        marginVertical: 20,
+        maxWidth: 100,
+        maxHeight: 100,
+    },
+    link: {
+        marginVertical: 10,
+        borderBottomWidth: 1,
+    }
+})

@@ -38,3 +38,6 @@ yarn-error.*
 
 # pycache
 __pycache__
+
+# environment variables
+.env

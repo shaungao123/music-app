@@ -41,3 +41,7 @@ __pycache__
 
 # environment variables
 .env
+
+# Alembic
+alembic/versions/*.py
+!alembic/versions/__init__.py

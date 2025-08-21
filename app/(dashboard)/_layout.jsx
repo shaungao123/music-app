@@ -90,7 +90,7 @@ export default function DashboardLayout() {
       />
 
       <Tabs.Screen
-        name="Profile"
+        name="(profile)/Profile"
         options={{
             href: null,
             title: "Profile",

@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/Colors";
 import { useColorScheme } from "react-native";
 import ThemedText from "../../Components/ThemedText";
+import { useState } from "react";
 
 export default function DashboardLayout() {
   const colorScheme = useColorScheme();
@@ -27,14 +28,16 @@ export default function DashboardLayout() {
         headerLeft: () => (
             <Link href="/Profile" asChild>
               <Pressable>
-                <Ionicons name="person-circle-outline" size={28} color="black" />
+                <Ionicons 
+                  name="person-circle-outline" 
+                  size={30} color="black" />
               </Pressable>
             </Link>
         ),
         headerRight: () => (
             <Link href="/Notifications" asChild>
                 <Pressable>
-                    <Ionicons name="notifications-outline" size={28} color="black" />
+                    <Ionicons name="notifications-outline" size={26} color="black" />
                 </Pressable>
             </Link>
       ),

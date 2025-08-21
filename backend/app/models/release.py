@@ -60,3 +60,4 @@ class Release(Base):
     def is_single(self):
         """Check if this is a single"""
         return self.release_type.lower() == "single"
+

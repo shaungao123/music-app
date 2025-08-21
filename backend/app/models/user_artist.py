@@ -36,3 +36,4 @@ class UserArtist(Base):
     def is_top_artist(self):
         """Check if this is one of the user's top artists (rank <= 10)"""
         return self.listening_rank is not None and self.listening_rank <= 10
+

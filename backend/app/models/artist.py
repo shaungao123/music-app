@@ -50,3 +50,4 @@ class Artist(Base):
         if self.image_urls and len(self.image_urls) > 0:
             return self.image_urls[0].get('url') if isinstance(self.image_urls[0], dict) else self.image_urls[0]
         return None
+

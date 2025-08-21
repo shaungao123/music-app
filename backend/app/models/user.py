@@ -36,3 +36,4 @@ class User(Base):
     
     def __repr__(self):
         return f"<User(id={self.id}, spotify_user_id='{self.spotify_user_id}', display_name='{self.display_name}')>"
+

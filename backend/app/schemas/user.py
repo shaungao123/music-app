@@ -1,10 +1,11 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional, List
+from typing import Optional
 from datetime import datetime
 
 # Base User Schema
 class UserBase(BaseModel):
-    email: Optional[EmailStr] = None
+    username: str = Field(..., max_length=50, description="Unique username")
+    email: EmailStr = Field(..., description="Valid email address")
     display_name: Optional[str] = Field(None, max_length=255)
     country: Optional[str] = Field(None, max_length=10)
     notification_enabled: bool = True
@@ -13,15 +14,12 @@ class UserBase(BaseModel):
 
 # User Creation Schema
 class UserCreate(UserBase):
-    spotify_user_id: str = Field(..., max_length=255, description="Spotify user ID from OAuth")
-    spotify_access_token: Optional[str] = None
-    spotify_refresh_token: Optional[str] = None
-    spotify_token_expires_at: Optional[datetime] = None
-    profile_image_url: Optional[str] = Field(None, max_length=500)
+    password: str = Field(..., min_length=8, description="Password (min 8 characters)")
 
 # User Login Schema
 class UserLogin(BaseModel):
-    spotify_user_id: str = Field(..., max_length=255, description="Spotify user ID for login")
+    username: str = Field(..., description="Username for login")
+    password: str = Field(..., description="Password for login")
 
 # User Update Schema
 class UserUpdate(BaseModel):
@@ -35,7 +33,6 @@ class UserUpdate(BaseModel):
 # User Response Schema
 class UserResponse(UserBase):
     id: int
-    spotify_user_id: str
     profile_image_url: Optional[str] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
@@ -54,4 +51,4 @@ class Token(BaseModel):
 # Token Data Schema (for JWT payload)
 class TokenData(BaseModel):
     user_id: Optional[int] = None
-    spotify_user_id: Optional[str] = None
+    username: Optional[str] = None

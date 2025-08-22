@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
 import os
+from pathlib import Path
 
 class Settings(BaseSettings):
     # Database Configuration
@@ -18,16 +19,20 @@ class Settings(BaseSettings):
     SPOTIFY_CLIENT_SECRET: Optional[str] = None
     SPOTIFY_REDIRECT_URI: str = "http://localhost:8000/spotify/callback"
     
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    model_config = {  
+        "env_file": [
+            ".env",                                    # Current directory
+            str(Path(__file__).parent / ".env"),       # Same directory as config.py
+            "backend/.env"                             # backend subdirectory
+        ],
+        "env_file_encoding": "utf-8"
+    }
 
 # Create settings instance
 settings = Settings()
 
-# Print config values for debugging (remove in production)
+# Print config values for debugging
 if settings.DEBUG:
     print(f"Environment: {settings.ENVIRONMENT}")
     print(f"Database URL: {settings.DATABASE_URL}")
     print(f"Secret Key: {settings.SECRET_KEY[:10]}..." if len(settings.SECRET_KEY) > 10 else "Secret Key: Too short!")
-

@@ -1,12 +1,16 @@
 from fastapi import FastAPI
 from .config import settings
 from .database import test_db_connection
+from .routers import auth
 
 app = FastAPI(
     title="Music Release Notification API", 
     version="1.0.0",
     debug=settings.DEBUG
 )
+
+# Include routers
+app.include_router(auth.router)
 
 @app.get("/")
 async def root():

@@ -9,14 +9,12 @@ class User(Base):
     # Primary key
     id = Column(Integer, primary_key=True, index=True)
     
-    # Spotify integration
-    spotify_user_id = Column(String(255), unique=True, index=True, nullable=False)
-    spotify_access_token = Column(Text, nullable=True)
-    spotify_refresh_token = Column(Text, nullable=True)
-    spotify_token_expires_at = Column(DateTime, nullable=True)
+    # Authentication
+    username = Column(String(50), unique=True, index=True, nullable=False)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(255), nullable=False)
     
     # User profile
-    email = Column(String(255), unique=True, index=True, nullable=True)
     display_name = Column(String(255), nullable=True)
     profile_image_url = Column(String(500), nullable=True)
     country = Column(String(10), nullable=True)
@@ -35,5 +33,5 @@ class User(Base):
     followed_artists = relationship("UserArtist", back_populates="user", cascade="all, delete-orphan")
     
     def __repr__(self):
-        return f"<User(id={self.id}, spotify_user_id='{self.spotify_user_id}', display_name='{self.display_name}')>"
+        return f"<User(id={self.id}, username='{self.username}', email='{self.email}')>"
 

@@ -59,3 +59,16 @@ const API_BASE =
     }
     return json; // { access_token, token_type, expires_in, user: {...} }
   }
+
+
+  export async function loginUser({ username, password }) {
+    const json = await postJSON("/auth/login", { username, password });
+    // Save token (and user if returned by your API)
+    if (json?.access_token) {
+      await AsyncStorage.setItem("access_token", json.access_token);
+    }
+    if (json?.user) {
+      await AsyncStorage.setItem("current_user", JSON.stringify(json.user));
+    }
+    return json; // { access_token, token_type, expires_in, user: {...} }
+  }

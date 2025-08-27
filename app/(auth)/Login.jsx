@@ -9,6 +9,9 @@ import Spacer from '../../Components/Spacer'
 import ThemedButton from '../../Components/ThemedButton';
 import { handleUrlParams } from 'expo-router/build/fork/getStateFromPath-forks';
 import ThemedTextInput from '../../Components/ThemedTextInput';
+import { handleLogin } from './auth';
+
+
 
 const Login = () => {
     const [username, setUsername] = useState('')

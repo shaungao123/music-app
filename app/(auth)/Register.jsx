@@ -16,7 +16,7 @@ import Spacer from "../../Components/Spacer";
 import ThemedButton from "../../Components/ThemedButton";
 import ThemedTextInput from "../../Components/ThemedTextInput";
 
-import { registerUser } from "./auth";
+import { registerUser } from "../../services/auth";
 
 const Register = () => {
   const router = useRouter();

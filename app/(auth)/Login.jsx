@@ -12,7 +12,7 @@ import Spacer from "../../Components/Spacer";
 import ThemedButton from "../../Components/ThemedButton";
 import ThemedTextInput from "../../Components/ThemedTextInput";
 
-import { loginUser } from "./auth"; // ⟵ use loginUser (not handleLogin)
+import { loginUser } from "../../services/auth"; // ⟵ use loginUser (not handleLogin)
 
 const Login = () => {
   const router = useRouter();

@@ -1,12 +1,7 @@
 // auth.js (JavaScript)
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const API_BASE =
-  Platform.select({
-    ios: "http://127.0.0.1:8000",    // iOS simulator
-    android: "http://10.0.2.2:8000", // Android emulator
-  }) || "http://192.168.1.23:8000";   // real device: your machine's LAN IP
+import API_BASE from "./api_base";
 
   async function postJSON(path, body) {
     const res = await fetch(`${API_BASE}${path}`, {

@@ -8,7 +8,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://username:password@localhost:5432/music_app_db"
     
     # Security
-    SECRET_KEY: str = "your-secret-key-here-change-in-production"
+    SECRET_KEY: str = "secret"
+    REFRESH_SECRET_KEY: str = "secret-refresh"
     
     # Application Settings
     DEBUG: bool = True

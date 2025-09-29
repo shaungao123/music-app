@@ -5,7 +5,7 @@ from datetime import datetime
 from ..database import get_db
 from ..models.user import User
 from ..schemas.user import UserCreate, UserResponse, UserLogin, Token
-from ..utils.security import create_user_token, get_password_hash, verify_password
+from ..utils.security import create_access_token, get_password_hash, verify_password
 from ..dependencies import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -52,11 +52,8 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
         db.refresh(db_user)
         
         # Create access token
-        access_token = create_user_token(
-            user_id=db_user.id,
-            username=db_user.username
-        )
-        
+        access_token = create_access_token(user_id=db_user.id)
+
         return Token(
             access_token=access_token,
             token_type="bearer",
@@ -95,10 +92,8 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     db.commit()
     
     # Create access token
-    access_token = create_user_token(
-        user_id=user.id,
-        username=user.username
-    )
+    access_token = create_access_token(user_id=user.id)
+
     
     return Token(
         access_token=access_token,

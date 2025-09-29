@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from .database import get_db
-from .utils.security import verify_user_token
+from .utils.security import verify_access_token
 from .models.user import User
 
 http_bearer = HTTPBearer(auto_error=False)
@@ -18,7 +18,7 @@ def get_current_user(
             detail="Not authenticated",
         )
 
-    payload = verify_user_token(credentials.credentials)
+    payload = verify_access_token(credentials.credentials)
     if not payload:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

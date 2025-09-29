@@ -28,7 +28,7 @@ import API_BASE from "./api_base";
   
   // Build the exact payload your FastAPI expects.
   // Required: username, password (email likely required too in your schema).
-  export async function registerUser({
+export async function registerUser({
     username,
     email,
     display_name,
@@ -56,7 +56,7 @@ import API_BASE from "./api_base";
   }
 
 
-  export async function loginUser({ username, password }) {
+export async function loginUser({ username, password }) {
     const json = await postJSON("/auth/login", { username, password });
     // Save token (and user if returned by your API)
     if (json?.access_token) {

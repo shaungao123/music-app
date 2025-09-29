@@ -13,7 +13,6 @@ const Home = () => {
             <ThemedText style={styles.title}>Music App</ThemedText>
             <Link href='/Login' style={styles.link}>Login</Link>
             <Link href='/Register' style={styles.link}>Register</Link>
-            <Link href='/Releases' style={styles.link}>Releases (Go to Main Dashboard)</Link>
         </ThemedView>
         
     )

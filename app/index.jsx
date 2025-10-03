@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Link } from "expo-router";
+import React, { useContext } from "react";
+
 
 import MusicSymbol from '../assets/img/music-symbol.png'
 import ThemedView from "../Components/ThemedView";
@@ -7,6 +9,7 @@ import ThemedText from "../Components/ThemedText";
 
 const Home = () => {
     return (
+
         <ThemedView style={styles.container}>
             <Image source={MusicSymbol} style={styles.img}/>
 

@@ -3,13 +3,14 @@ import React from 'react'
 import { Stack } from 'expo-router'
 import { Colors } from '../constants/Colors'
 import { StatusBar } from 'expo-status-bar'
+import { AuthProvider } from "./AuthContext";
 
 const RootLayout = () => {
     const colorScheme = useColorScheme()
     const theme = Colors[colorScheme] ?? Colors.light
   return (
-    <>
-      <StatusBar value='auto'></StatusBar>
+    <AuthProvider>
+      <StatusBar style='auto' />
        <Stack screenOptions={{
           headerStyle: {backgroundColor: theme.navBackground},
           headerTintColor: theme.title,
@@ -19,7 +20,7 @@ const RootLayout = () => {
 
           <Stack.Screen name="index" options={{headerShown: false, title: 'Home'}}></Stack.Screen>
         </Stack>
-    </>
+    </AuthProvider>
 
   )
 }

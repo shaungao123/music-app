@@ -1,37 +1,99 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+// AuthContext.js
+import React, { createContext, useContext, useState } from "react";
+import axios from "axios";
 
-// 1. Create the context
-const AuthContext = createContext(null);
+const userContext = createContext(null);
 
-// 2. Provider that wraps the app
+// Create a pre-configured axios instance
+const api = axios.create({
+  baseURL: "http://localhost:8000", // your backend root
+  headers: { "Content-Type": "application/json" },
+});
+
 export function AuthProvider({ children }) {
-  const [accessToken, setAccessToken] = useState(() => {
-    return localStorage.getItem("access_token") || null;
-  });
+  const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useState(null);
 
-  // Persist token to localStorage whenever it changes
-  useEffect(() => {
-    if (accessToken) {
-      localStorage.setItem("access_token", accessToken);
-    } else {
-      localStorage.removeItem("access_token");
+  // --- Login ---
+  async function login(username, password) {
+    try {
+      const res = await api.post("/auth/login", { username, password });
+
+      setAccessToken(res.data.access_token);
+      setUser(res.data.user);
+      return true;
+    } catch (err) {
+      console.error("Login error:", err);
+      return false;
     }
-  }, [accessToken]);
+  }
 
-  // Optional: logout helper
-  const logout = () => {
+  // --- Logout ---
+  function logout() {
     setAccessToken(null);
-    localStorage.removeItem("access_token");
-  };
+    setUser(null);
+  }
+
+  // --- Register ---
+  async function register({
+    username,
+    email,
+    display_name,
+    country,
+    notification_enabled = true,
+    email_notifications = true,
+    push_notifications = true,
+    password,
+  }) {
+    try {
+      const res = await api.post("/auth/register", {
+        username,
+        email,
+        display_name,
+        country,
+        notification_enabled,
+        email_notifications,
+        push_notifications,
+        password,
+      });
+
+      setAccessToken(res.data.access_token);
+      setUser(res.data.user);
+      return true;
+    } catch (err) {
+      console.error("Register error:", err);
+      return false;
+    }
+  }
+
+  // --- Protected request helper ---
+  async function authFetch(url, options = {}) {
+    if (!accessToken) throw new Error("Not authenticated");
+
+    try {
+      const res = await api.request({
+        url,
+        method: options.method || "GET",
+        headers: {
+          ...(options.headers || {}),
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: options.body || undefined, // axios uses `data` instead of `body`
+      });
+      return res;
+    } catch (err) {
+      console.error("authFetch error:", err);
+      throw err;
+    }
+  }
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, logout }}>
+    <userContext.Provider value={{ accessToken, user, login, logout, register, authFetch }}>
       {children}
-    </AuthContext.Provider>
+    </userContext.Provider>
   );
 }
 
-// 3. Custom hook to use the auth context
 export function useAuth() {
-  return useContext(AuthContext);
+  return useContext(userContext);
 }

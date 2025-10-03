@@ -16,18 +16,18 @@ import Spacer from "../../Components/Spacer";
 import ThemedButton from "../../Components/ThemedButton";
 import ThemedTextInput from "../../Components/ThemedTextInput";
 
-import { registerUser } from "../../services/auth";
+import { useAuth } from "../AuthContext";
 
 const Register = () => {
   const router = useRouter();
+  const { register } = useAuth(); // 👈 grab register from context
 
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");                 // ← matches schema
-  const [displayName, setDisplayName] = useState("");     // optional
-  const [country, setCountry] = useState("");             // optional
+  const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [country, setCountry] = useState("");
   const [password, setPassword] = useState("");
 
-  // booleans default to true per your example
   const [notifEnabled, setNotifEnabled] = useState(true);
   const [emailNotif, setEmailNotif] = useState(true);
   const [pushNotif, setPushNotif] = useState(true);
@@ -40,19 +40,24 @@ const Register = () => {
     setError("");
     setSubmitting(true);
     try {
-      const json = await registerUser({
+      const success = await register({
         username,
         email,
-        display_name: displayName || username, // reasonable default
-        country,                                // leave empty "" if not provided
+        display_name: displayName || username,
+        country,
         notification_enabled: notifEnabled,
         email_notifications: emailNotif,
         push_notifications: pushNotif,
         password,
       });
-      console.log("REGISTER JSON:", json);
-      // Navigate: either into app or to Login screen
-      router.replace("/Login"); // or router.replace("/Login")
+
+      if (success) {
+        // You can send them straight into the app
+        router.replace("/Releases");
+        // or back to login if you prefer: router.replace("/Login")
+      } else {
+        setError("Registration failed");
+      }
     } catch (e) {
       setError(e?.message || "Registration failed");
     } finally {
@@ -115,7 +120,7 @@ const Register = () => {
           onSubmitEditing={onRegister}
         />
 
-        {/* Notification toggles to match your boolean fields */}
+        {/* Notification toggles */}
         <View style={styles.row}>
           <ThemedText>Notifications Enabled</ThemedText>
           <Switch value={notifEnabled} onValueChange={setNotifEnabled} />

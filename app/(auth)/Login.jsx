@@ -1,8 +1,7 @@
-// Login.jsx
 import React, { useState } from "react";
 import {
   StyleSheet, Text, Keyboard, TouchableWithoutFeedback,
-  ActivityIndicator, View
+  ActivityIndicator
 } from "react-native";
 import { Link, useRouter } from "expo-router";
 
@@ -12,13 +11,14 @@ import Spacer from "../../Components/Spacer";
 import ThemedButton from "../../Components/ThemedButton";
 import ThemedTextInput from "../../Components/ThemedTextInput";
 
-import { loginUser } from "../../services/auth"; // ⟵ use loginUser (not handleLogin)
+import { useAuth } from "../AuthContext";
 
 const Login = () => {
   const router = useRouter();
+  const { login } = useAuth(); // 👈 grab login from context
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -27,10 +27,12 @@ const Login = () => {
     setError("");
     setSubmitting(true);
     try {
-      const json = await loginUser({ username, password });
-      console.log("LOGIN JSON:", json);
-      // go to your app's home screen
-      router.replace("/Releases"); // or whatever your first tab is
+      const success = await login(username, password); // 👈 call context login
+      if (success) {
+        router.replace("/Releases"); // redirect to your main screen
+      } else {
+        setError("Invalid username or password");
+      }
     } catch (e) {
       setError(e?.message || "Login failed");
     } finally {

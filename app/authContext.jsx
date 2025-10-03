@@ -14,6 +14,7 @@ export function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
   const [user, setUser] = useState(null);
 
+
   // --- Login ---
   async function login(username, password) {
     try {
@@ -83,6 +84,14 @@ export function AuthProvider({ children }) {
       return res;
     } catch (err) {
       console.error("authFetch error:", err);
+      
+      // Handle token expiration
+      if (err.response?.status === 401) {
+        console.log("Token expired, logging out user");
+        logout();
+        throw new Error("Session expired. Please log in again.");
+      }
+      
       throw err;
     }
   }

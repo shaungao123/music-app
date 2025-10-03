@@ -34,10 +34,54 @@ const Register = () => {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Username validation
+    if (!username.trim()) {
+      errors.username = "Username is required";
+    } else if (username.length > 50) {
+      errors.username = "Username must be 50 characters or less";
+    }
+
+    // Email validation
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    // Password validation
+    if (!password) {
+      errors.password = "Password is required";
+    } else if (password.length < 8) {
+      errors.password = "Password must be at least 8 characters";
+    }
+
+    // Display name validation (optional but if provided, should be valid)
+    if (displayName && displayName.length < 2) {
+      errors.displayName = "Display name must be at least 2 characters";
+    }
+
+    return errors;
+  };
 
   const onRegister = async () => {
     if (submitting) return;
+    
+    // Clear previous errors
     setError("");
+    setValidationErrors({});
+    
+    // Validate form
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
     setSubmitting(true);
     try {
       const success = await register({
@@ -76,7 +120,7 @@ const Register = () => {
         </ThemedText>
 
         <ThemedTextInput
-          style={styles.input}
+          style={[styles.input, validationErrors.username && styles.inputError]}
           placeholder="Username"
           autoCapitalize="none"
           autoCorrect={false}
@@ -84,8 +128,12 @@ const Register = () => {
           onChangeText={setUsername}
           returnKeyType="next"
         />
+        {validationErrors.username && (
+          <ThemedText style={styles.fieldError}>{validationErrors.username}</ThemedText>
+        )}
+
         <ThemedTextInput
-          style={styles.input}
+          style={[styles.input, validationErrors.email && styles.inputError]}
           placeholder="Email"
           keyboardType="email-address"
           autoCapitalize="none"
@@ -94,13 +142,21 @@ const Register = () => {
           onChangeText={setEmail}
           returnKeyType="next"
         />
+        {validationErrors.email && (
+          <ThemedText style={styles.fieldError}>{validationErrors.email}</ThemedText>
+        )}
+
         <ThemedTextInput
-          style={styles.input}
+          style={[styles.input, validationErrors.displayName && styles.inputError]}
           placeholder="Display name (optional)"
           value={displayName}
           onChangeText={setDisplayName}
           returnKeyType="next"
         />
+        {validationErrors.displayName && (
+          <ThemedText style={styles.fieldError}>{validationErrors.displayName}</ThemedText>
+        )}
+
         <ThemedTextInput
           style={styles.input}
           placeholder="Country (optional)"
@@ -108,8 +164,9 @@ const Register = () => {
           onChangeText={setCountry}
           returnKeyType="next"
         />
+
         <ThemedTextInput
-          style={styles.input}
+          style={[styles.input, validationErrors.password && styles.inputError]}
           placeholder="Password"
           secureTextEntry
           autoCapitalize="none"
@@ -119,6 +176,9 @@ const Register = () => {
           returnKeyType="go"
           onSubmitEditing={onRegister}
         />
+        {validationErrors.password && (
+          <ThemedText style={styles.fieldError}>{validationErrors.password}</ThemedText>
+        )}
 
         {/* Notification toggles */}
         <View style={styles.row}>
@@ -161,6 +221,18 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
   title: { textAlign: "center", fontSize: 18, marginBottom: 30 },
   input: { width: "80%", marginBottom: 16 },
+  inputError: { 
+    borderColor: "#e33", 
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  fieldError: { 
+    color: "#e33", 
+    fontSize: 12, 
+    marginBottom: 8,
+    marginTop: -8,
+    width: "80%",
+  },
   row: {
     width: "80%",
     flexDirection: "row",
